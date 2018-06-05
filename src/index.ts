@@ -7,7 +7,7 @@ import * as Http from 'http';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 
-
+import apiRouter from './routes/route-handler';
 import Logger from './utils/logger';
 
 
@@ -27,16 +27,21 @@ async function run() {
     app.use(bodyParser.json());
 
     // test route
-    app.get('/', (_req, res) => {
+    app.get('/', (req, res) => {
+        console.log('A request has been sent: ', req);
         const date = new Date();
         res.send(`API running at: ${date}`);
     });
 
+    // api routes
+    app.use('/api', apiRouter);
+
+    // establish http server
     const server = Http.createServer(app);
     const { PORT, SERVER } = process.env;
 
     server.listen(PORT, () => {
-        console.log(`Server is listening at ${SERVER}:${PORT}`);
+        console.log(`Server is listening at http://${SERVER}:${PORT}`);
     });
 }
 
