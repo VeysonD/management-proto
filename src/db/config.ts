@@ -1,6 +1,6 @@
 import * as cassandra from 'cassandra-driver';
 
-const { DB_URL, KEYSPACE } = process.env;
+const { DB_URL } = process.env;
 
 const client = new cassandra.Client({
     contactPoints: [DB_URL]
@@ -16,6 +16,7 @@ async function dbConnect() {
             };`);
     console.log('Welcome to Cassandra');
 }
+
 
 dbConnect().catch((err) => console.error(`There was an error while connecting to Cassandra: ${err}`));
 
