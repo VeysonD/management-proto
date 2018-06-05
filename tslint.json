@@ -1,0 +1,9 @@
+{
+    "extends": "tslint:latest",
+    "no-consecutive-blank-lines": false,
+    "no-unused-variables": true,
+    "quotemark": [
+        true,
+        "single",
+    ],
+}

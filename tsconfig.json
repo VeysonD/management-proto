@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2018",
+        "noImplicityAny": false,
+        "sourceMap": false,
+        "rootDir": "src",
+        "outDir": "dist",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowSyntheticDefaultImports": true,
+    }
+}
