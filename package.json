@@ -1,5 +1,5 @@
 {
-  "name": "Management Proto",
+  "name": "management-proto",
   "version": "1.0.0",
   "description": "Project Management",
   "repository": "https://github.com/VeysonD/management-proto.git",
@@ -10,6 +10,7 @@
     "apollo-server-express": "^1.3.6",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "graphql": "^0.13.2",
     "winston": "^2.4.2",
@@ -20,7 +21,16 @@
     "@types/express": "^4.16.0",
     "@types/node": "^10.3.1",
     "@types/ws": "^5.1.1",
+    "nodemon": "^1.17.5",
     "tslint": "^5.10.0",
     "typescript": "^2.9.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "npm run watch & npm run dev:1",
+    "dev:1": "nodemon --inspect dist",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "node dist/index.js",
+    "watch": "tsc -w"
   }
 }

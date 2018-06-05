@@ -2,12 +2,16 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es2018",
-        "noImplicityAny": false,
+        "noImplicitAny": false,
         "sourceMap": false,
         "rootDir": "src",
         "outDir": "dist",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "allowSyntheticDefaultImports": true,
+        "lib": [
+            "es2018",
+            "esnext"
+        ]
     }
 }
