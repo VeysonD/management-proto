@@ -7,13 +7,14 @@ const client = new cassandra.Client({
 });
 
 async function dbConnect() {
-    await client.connect();
+    await client.connect(); 
     await client.execute(`
             CREATE KEYSPACE IF NOT EXISTS proto 
             WITH REPLICATION = {
                 'class': 'SimpleStrategy',
                 'replication_factor': 1
             };`);
+    client.execute(`USE proto`);
     console.log('Welcome to Cassandra');
 }
 

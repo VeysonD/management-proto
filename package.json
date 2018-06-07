@@ -31,6 +31,7 @@
     "dev": "npm run watch & npm run dev:1",
     "dev:1": "nodemon --inspect dist",
     "lint": "tslint -c tslint.json -p tsconfig.json",
+    "seed": "npm run build && node dist/db/seed.js",
     "start": "node dist/index.js",
     "watch": "tsc -w"
   }
