@@ -11,7 +11,7 @@ const client = new cassandra.Client({
 });
 
 const createUserTable = `
-  CREATE TABLE IF NOT EXISTS user(
+  CREATE TABLE IF NOT EXISTS user( 
       username text PRIMARY KEY,
       password text
     );
@@ -26,7 +26,8 @@ const createProjectType = `
 
 const createTaskTable = `
   CREATE TABLE IF NOT EXISTS task(
-      name text PRIMARY KEY,
+      id text PRIMARY KEY,
+      name text,
       description text,
       in_project frozen<project>
     );
@@ -35,8 +36,9 @@ const createTaskTable = `
 const insertUser = `INSERT INTO user(username, password) VALUES(?, ?)`;
 const userParams = ['bob', '123456'];
 
-const insertTask = `INSERT INTO task(name, description, in_project) VALUES(?, ?, ?)`;
+const insertTask = `INSERT INTO task(id, name, description, in_project) VALUES(?, ?, ?, ?)`;
 const taskParams = [
+    't1',
     'Add Weather Widget',
     'Add a feature that allows the user to check the weather',
     {
@@ -96,4 +98,4 @@ async function dbSeed() {
     
 }
 
-dbSeed().catch((err) => console.error(`There was an error while seedoing Cassandra: ${err}`));
+dbSeed().catch((err) => console.error(`There was an error while seeding Cassandra: ${err}`));
