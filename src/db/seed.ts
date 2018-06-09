@@ -29,34 +29,34 @@ const createUsersTable = `
     );
 `;
 
-const createProjectsType = `
-  CREATE TYPE IF NOT EXISTS projects(
-      title text,
-      description text
-    );
+const createProjectsTable = `
+    CREATE TABLE IF NOT EXISTS projects(
+        id text PRIMARY KEY,
+        title text,
+        due_date timestamp,
+        start_date timestamp,
+        members set<text>,
+        admins set<text>,
+        owner_id text
+    )
 `;
 
 const createTasksTable = `
   CREATE TABLE IF NOT EXISTS tasks(
       id text PRIMARY KEY,
       name text,
-      description text,
-      in_project frozen<projects>
+      description text
     );
 `;
 
 const insertUser = `INSERT INTO users(id, email, name) VALUES(?, ?, ?)`;
-const userParams = ['1a', 'bob@yahoo.co.jp', 'Bob'];
+const userParams = ['u1', 'bob@yahoo.co.jp', 'Bob'];
 
-const insertTask = `INSERT INTO tasks(id, name, description, in_project) VALUES(?, ?, ?, ?)`;
+const insertTask = `INSERT INTO tasks(id, name, description) VALUES(?, ?, ?)`;
 const taskParams = [
     't1',
     'Add Weather Widget',
-    'Add a feature that allows the user to check the weather',
-    {
-        title: 'Weather App',
-        description: 'Application that will show the user the weather'
-    }
+    'Add a feature that allows the user to check the weather'
 ];
 
 const insertionQueries = [
@@ -93,10 +93,10 @@ async function dbSeed() {
     console.log('Workspaces table created');
 
     await client.execute(createUsersTable);
-    console.log('Users Table created');
+    console.log('Users table created');
 
-    await client.execute(createProjectsType);
-    console.log('Projects type created');
+    await client.execute(createProjectsTable);
+    console.log('Projects table created');
 
     await client.execute(createTasksTable);
     console.log('Tasks table created');
