@@ -10,19 +10,14 @@ const client = new cassandra.Client({
     contactPoints: [DB_URL]
 });
 
-const dropUserTable = `DROP TABLE IF EXISTS proto.user`;
-const dropTaskTable = `DROP TABLE IF EXISTS proto.task`;
-
 async function dbDrop() {
     await client.connect();
-    await client.execute(dropUserTable);
-    console.log('User table dropped');
-
-    await client.execute(dropTaskTable);
-    console.log('Task table dropped');
+    console.log('Connected to cassandra');
+    await client.execute('DROP KEYSPACE IF EXISTS proto');
+    console.log('Keyspace proto dropped');
 
     console.log('Shutting down');
     client.shutdown();
 }
 
-dbDrop().catch(err => console.error(`There was an error while dropping the tables: ${err}`));
+dbDrop().catch(err => console.error(`There was an error while dropping the keyspace: ${err}`));
