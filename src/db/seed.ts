@@ -10,6 +10,17 @@ const client = new cassandra.Client({
     contactPoints: [DB_URL]
 });
 
+const createWorkspaceTable = `
+    CREATE TABLE IF NOT EXISTS workspace(
+        id text PRIMARY KEY,
+        title text,
+        owner_id text,
+        members set<text>,
+        admins text,
+        guests set<text>
+    );
+`;
+
 const createUserTable = `
   CREATE TABLE IF NOT EXISTS user( 
       username text PRIMARY KEY,
@@ -77,8 +88,11 @@ async function dbSeed() {
     console.log('Connected to proto keyspace');
     console.log('Now seeding');
 
+    await client.execute(createWorkspaceTable);
+    console.log('Workspace table created');
+
     await client.execute(createUserTable);
-    console.log('User Tables created');
+    console.log('User Table created');
 
     await client.execute(createProjectType);
     console.log('Project type created');
