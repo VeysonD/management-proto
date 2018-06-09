@@ -10,8 +10,8 @@ const client = new cassandra.Client({
     contactPoints: [DB_URL]
 });
 
-const createWorkspaceTable = `
-    CREATE TABLE IF NOT EXISTS workspace(
+const createWorkspacesTable = `
+    CREATE TABLE IF NOT EXISTS workspaces(
         id text PRIMARY KEY,
         title text,
         owner_id text,
@@ -21,33 +21,34 @@ const createWorkspaceTable = `
     );
 `;
 
-const createUserTable = `
-  CREATE TABLE IF NOT EXISTS user( 
-      username text PRIMARY KEY,
-      password text
+const createUsersTable = `
+  CREATE TABLE IF NOT EXISTS users( 
+      id text PRIMARY KEY,
+      email text,
+      name text
     );
 `;
 
-const createProjectType = `
-  CREATE TYPE IF NOT EXISTS project(
+const createProjectsType = `
+  CREATE TYPE IF NOT EXISTS projects(
       title text,
       description text
     );
 `;
 
-const createTaskTable = `
-  CREATE TABLE IF NOT EXISTS task(
+const createTasksTable = `
+  CREATE TABLE IF NOT EXISTS tasks(
       id text PRIMARY KEY,
       name text,
       description text,
-      in_project frozen<project>
+      in_project frozen<projects>
     );
 `;
 
-const insertUser = `INSERT INTO user(username, password) VALUES(?, ?)`;
-const userParams = ['bob', '123456'];
+const insertUser = `INSERT INTO users(id, email, name) VALUES(?, ?, ?)`;
+const userParams = ['1a', 'bob@yahoo.co.jp', 'Bob'];
 
-const insertTask = `INSERT INTO task(id, name, description, in_project) VALUES(?, ?, ?, ?)`;
+const insertTask = `INSERT INTO tasks(id, name, description, in_project) VALUES(?, ?, ?, ?)`;
 const taskParams = [
     't1',
     'Add Weather Widget',
@@ -88,28 +89,30 @@ async function dbSeed() {
     console.log('Connected to proto keyspace');
     console.log('Now seeding');
 
-    await client.execute(createWorkspaceTable);
-    console.log('Workspace table created');
+    await client.execute(createWorkspacesTable);
+    console.log('Workspaces table created');
 
-    await client.execute(createUserTable);
-    console.log('User Table created');
+    await client.execute(createUsersTable);
+    console.log('Users Table created');
 
-    await client.execute(createProjectType);
-    console.log('Project type created');
+    await client.execute(createProjectsType);
+    console.log('Projects type created');
 
-    await client.execute(createTaskTable);
-    console.log('Task table created');
+    await client.execute(createTasksTable);
+    console.log('Tasks table created');
     console.log('Now inserting data into keyspace');
 
     await client.batch(insertionQueries, queryOptions, (err) => {
         if (err) console.error(err);
         else {
-            console.log('Data inserted into keyspace');
+            console.log('Data inserted into keyspace proto');
             console.log('Seeding finished');
             client.shutdown();
         }
-    });
-    
+    }); 
 }
 
-dbSeed().catch((err) => console.error(`There was an error while seeding Cassandra: ${err}`));
+dbSeed().catch((err) => {
+    console.error(`There was an error while seeding Cassandra: ${err}`);
+    client.shutdown();
+});
