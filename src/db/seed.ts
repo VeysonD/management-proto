@@ -15,10 +15,11 @@ const createWorkspacesTable = `
     CREATE TABLE IF NOT EXISTS workspaces(
         id text PRIMARY KEY,
         title text,
-        owner_id text,
+        projects set<text>,
         members set<text>,
         admins set<text>,
-        guests set<text>
+        guests set<text>,
+        owner_id text
     );
 `;
 
@@ -35,6 +36,7 @@ const createProjectsTable = `
     CREATE TABLE IF NOT EXISTS projects(
         id text PRIMARY KEY,
         title text,
+        description text,
         due_date timestamp,
         start_date timestamp,
         members set<text>,
@@ -47,6 +49,7 @@ const createProjectsTable = `
 const createTasklistsTable = `
     CREATE TABLE IF NOT EXISTS tasklists (
         id text PRIMARY KEY,
+        title text,
         tasks set<text>
     )
 `;
@@ -82,6 +85,39 @@ const taskParams = [
     'u1'
 ];
 
+const insertWorkspace = `INSERT INTO workspaces(id, title, projects, members, admins, guests, owner_id) VALUES (?, ?, ?, ?, ?, ?, ?)`
+const workspaceParams = [
+    'w1',
+    'Duty Planet',
+    ['p1'],
+    ['u1', 'u2', 'u3'],
+    ['u1'],
+    [],
+    'u1'
+];
+
+
+const insertProject = `INSERT INTO projects(id, title, description, due_date, start_date, members, admins, owner_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;
+const projectParams = [
+    'p1',
+    'General App',
+    'Project to create an application that will do it all',
+    Date.now(),
+    Date.now(),
+    ['u1', 'u2', 'u3'],
+    ['u1', 'u2'],
+    'u1'
+]
+
+const insertTasklist = `INSERT INTO tasklists(id, title, tasks) VALUES(?, ?, ?)`;
+const tasklistParams = [
+    'tl1',
+    'Queued Tasks',
+    [
+        't1'
+    ]
+];
+
 const insertionQueries = [
     {
         query: insertUser1,
@@ -98,6 +134,18 @@ const insertionQueries = [
     {
         query: insertTask,
         params: taskParams
+    },
+    {
+        query: insertTasklist,
+        params: tasklistParams
+    },
+    {
+        query: insertProject,
+        params: projectParams
+    },
+    {
+        query: insertWorkspace,
+        params: workspaceParams
     }
 ];
 
