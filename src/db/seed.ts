@@ -75,11 +75,23 @@ const user2Params = ['u2', 'joe@yahoo.com', 'Joe'];
 const insertUser3 = `INSERT INTO users(id, email, name) VALUES(?, ?, ?)`;
 const user3Params = ['u3', 'ann@google.com', 'Ann'];
 
-const insertTask = `INSERT INTO tasks(id, title, description, assignees, owner_id, last_updated) VALUES(?, ?, ?, ?, ?, ?)`;
-const taskParams = [
+const insertTask1 = `INSERT INTO tasks(id, title, description, assignees, owner_id, last_updated) VALUES(?, ?, ?, ?, ?, ?)`;
+const taskParams1 = [
     't1',
     'Add Weather Widget',
     'Add a feature that allows the user to check the weather',
+    [
+        'u2', 'u3'
+    ],
+    'u1',
+    new Date()
+];
+
+const insertTask2 = `INSERT INTO tasks(id, title, description, assignees, owner_id, last_updated) VALUES(?, ?, ?, ?, ?, ?)`;
+const taskParams2 = [
+    't2',
+    'Add Cooking Widget',
+    'Add a feature that allows the user to check the microwave',
     [
         'u2', 'u3'
     ],
@@ -134,8 +146,12 @@ const insertionQueries = [
         params: user3Params,
     },
     {
-        query: insertTask,
-        params: taskParams
+        query: insertTask1,
+        params: taskParams1
+    },
+    {
+        query: insertTask2,
+        params: taskParams2
     },
     {
         query: insertTasklist,
@@ -189,9 +205,12 @@ async function dbSeed() {
     await client.batch(insertionQueries, queryOptions, (err) => {
         if (err) console.error(err);
         else {
-            console.log('Data inserted into keyspace proto');
-            console.log('Seeding finished');
-            client.shutdown();
+            client.execute(`UPDATE tasks SET last_updated = '2019-05-05' where id='t1'`)
+              .then(() => {
+                  console.log('Data inserted into keyspace proto');
+                  console.log('Seeding finished');
+                  client.shutdown();
+              });
         }
     });
 
