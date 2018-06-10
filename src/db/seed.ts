@@ -61,7 +61,8 @@ const createTasksTable = `
       title text,
       description text,
       assignees set<text>,
-      owner_id text
+      owner_id text,
+      last_updated timestamp
     );
 `;
 
@@ -74,7 +75,7 @@ const user2Params = ['u2', 'joe@yahoo.com', 'Joe'];
 const insertUser3 = `INSERT INTO users(id, email, name) VALUES(?, ?, ?)`;
 const user3Params = ['u3', 'ann@google.com', 'Ann'];
 
-const insertTask = `INSERT INTO tasks(id, title, description, assignees, owner_id) VALUES(?, ?, ?, ?, ?)`;
+const insertTask = `INSERT INTO tasks(id, title, description, assignees, owner_id, last_updated) VALUES(?, ?, ?, ?, ?, ?)`;
 const taskParams = [
     't1',
     'Add Weather Widget',
@@ -82,7 +83,8 @@ const taskParams = [
     [
         'u2', 'u3'
     ],
-    'u1'
+    'u1',
+    new Date()
 ];
 
 const insertWorkspace = `INSERT INTO workspaces(id, title, projects, members, admins, guests, owner_id) VALUES (?, ?, ?, ?, ?, ?, ?)`
@@ -191,7 +193,17 @@ async function dbSeed() {
             console.log('Seeding finished');
             client.shutdown();
         }
-    }); 
+    });
+
+    // Test WRITETIME CQL function 
+    // const time1 = (await client.execute(`SELECT WRITETIME(email) FROM users WHERE id='u1'`)).rows[0]['writetime(email)'];
+    // console.log('Write time for User 1\'s email retrieved: ', new Date(time1));
+
+    // await client.execute(`UPDATE users SET email = 'bobobobob@bing.com' WHERE id='u1'`);
+    // console.log('Updated user 1\'s email to bobobobob@bing.com');
+
+    // const time2 = (await client.execute(`SELECT WRITETIME(email) FROM users WHERE id='u1'`)).rows[0]['writetime(email)'];
+    // console.log('Write time for User 1\'s updated email retrieved: ', time2);
 }
 
 dbSeed().catch((err) => {
