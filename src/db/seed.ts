@@ -214,9 +214,9 @@ async function dbSeed() {
         }
     });
 
-    // Test WRITETIME CQL function 
+    // // Test WRITETIME CQL function 
     // const time1 = (await client.execute(`SELECT WRITETIME(email) FROM users WHERE id='u1'`)).rows[0]['writetime(email)'];
-    // console.log('Write time for User 1\'s email retrieved: ', new Date(time1));
+    // console.log('Write time for User 1\'s email retrieved: ', time1);
 
     // await client.execute(`UPDATE users SET email = 'bobobobob@bing.com' WHERE id='u1'`);
     // console.log('Updated user 1\'s email to bobobobob@bing.com');
